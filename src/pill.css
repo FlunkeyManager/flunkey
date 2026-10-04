@@ -1,0 +1,317 @@
+:root {
+  color-scheme: dark;
+  --panel: rgba(12, 12, 16, 0.96);
+  --stroke: rgba(255, 255, 255, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+body {
+  overflow: hidden;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Stable baseline positioning – anchored bottom-center */
+.stage {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Wispr Flow-style floating pill
+   Anchored at exact horizontal center (left: 50% + translateX(-50%))
+   and bottom baseline (transform-origin: center bottom) for smooth vertical expansion. */
+.hud {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  transform-origin: center bottom;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  user-select: none;
+  pointer-events: auto;
+  cursor: default;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  overflow: hidden;
+  transition:
+    width 220ms cubic-bezier(0.2, 0.9, 0.3, 1),
+    height 220ms cubic-bezier(0.2, 0.9, 0.3, 1),
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+/* IDLE: 68×7 minimal sleek bar */
+.hud--idle {
+  width: 68px;
+  height: 7px;
+  padding: 0;
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.75);
+}
+
+.hud--idle .hud-center {
+  opacity: 0 !important;
+  transform: scale(0.65) !important;
+  pointer-events: none !important;
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+/* RECORDING: Sleek 96×30 pill. Unified width avoids any secondary resize jerk when app icon resolves */
+.hud--recording {
+  width: 96px;
+  height: 30px;
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* HANDS-FREE: 154×30 — X smoothly expands at left, Check at right (NO OVERLAP) */
+.hud--handsfree {
+  width: 154px;
+  height: 30px;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* PROCESSING: Compact 72×30 centered indicator */
+.hud--processing {
+  width: 72px;
+  height: 30px;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Center cluster: mathematically centered with margin: 0 auto at all times */
+.hud-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto;
+  flex-shrink: 0;
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 160ms ease 40ms,
+    transform 200ms cubic-bezier(0.16, 1, 0.3, 1) 40ms,
+    gap 200ms ease;
+}
+
+/* Visualizer container — 46×16 for 10-bar Wispr Flow waveform */
+.wave-wrap {
+  width: 46px;
+  height: 16px;
+  min-width: 46px;
+  min-height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+canvas {
+  width: 46px;
+  height: 16px;
+  display: block;
+}
+
+/* App icon badge */
+.appIcon {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: scale(0.7);
+  animation: appIconFadeIn 180ms ease forwards;
+}
+
+@keyframes appIconFadeIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.appIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+
+/* Crisp rotating spinner for processing state */
+.spinner {
+  width: 15px;
+  height: 15px;
+  min-width: 15px;
+  min-height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: pillSpin 700ms linear infinite;
+  flex-shrink: 0;
+  display: block;
+}
+
+@keyframes pillSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hands-free action buttons — smoothly animate in and out without DOM popping */
+.hfX,
+.hfCheck {
+  width: 0;
+  min-width: 0;
+  height: 22px;
+  min-height: 22px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  line-height: 0;
+  flex-shrink: 0;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  transform: scale(0.6);
+  transition:
+    width 240ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 180ms ease,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    margin 240ms cubic-bezier(0.16, 1, 0.3, 1),
+    background 150ms ease;
+}
+
+.hud--handsfree .hfX {
+  width: 22px;
+  min-width: 22px;
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  margin-left: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.hud--handsfree .hfX:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.hud--handsfree .hfCheck {
+  width: 22px;
+  min-width: 22px;
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  margin-right: 8px;
+  background: #ffffff;
+  color: #111111;
+  border: 1px solid transparent;
+}
+
+.hud--handsfree .hfCheck:hover {
+  background: #e6e6e6;
+}
+
+.hfX svg,
+.hfCheck svg {
+  display: block;
+  margin: auto;
+}
+
+/* Toast */
+.pillToast {
+  position: fixed;
+  left: 50%;
+  bottom: 58px;
+  transform: translateX(-50%) translateY(6px);
+  background: #1e1e22;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  max-width: calc(100% - 20px);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.62), 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  opacity: 0;
+  animation: pillToastIn 200ms ease forwards, pillToastOut 200ms ease 2000ms forwards;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.pillToast--error {
+  background: #2a1212;
+  border-color: rgba(239, 68, 68, 0.38);
+  color: #ffd1d1;
+}
+
+@keyframes pillToastIn {
+  from {
+    transform: translateX(-50%) translateY(6px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pillToastOut {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+}

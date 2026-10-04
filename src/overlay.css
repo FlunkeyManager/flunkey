@@ -1,0 +1,820 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100%;
+}
+
+.overlayRoot {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(20, 20, 19, 0.94);
+  border: 1px solid rgba(46, 46, 44, 0.9);
+  border-radius: 18px;
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  backdrop-filter: blur(12px);
+  position: relative;
+}
+.overlayRoot--free {
+  overflow: hidden;
+}
+
+.overlayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 8px;
+}
+.overlayHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.overlayMenuBtn {
+  appearance: none;
+  border: 1px solid rgba(46,46,44,0.9);
+  background: rgba(38,38,36,0.7);
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.overlayMenuBtn:hover {
+  background: rgba(38,38,36,0.95);
+  border-color: rgba(255,255,255,0.08);
+}
+.overlayMenuBtn.active {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(46,46,44,1);
+}
+.overlayMenuIcon {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(0.85);
+}
+.overlayHeader--draggable {
+  cursor: grab;
+  user-select: none;
+}
+.overlayHeader--draggable:active {
+  cursor: grabbing;
+}
+.overlayHeader--draggable .overlayTitle::after {
+  content: " · drag";
+  font-size: 10px;
+  font-weight: 500;
+  color: #83827a;
+  letter-spacing: 0.02em;
+}
+.overlayScreenshotBtn {
+  appearance: none;
+  border: 1px solid rgba(46, 46, 44, 0.9);
+  background: rgba(38, 38, 36, 0.7);
+  color: #e9e8e4;
+  border-radius: 10px;
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+}
+.overlayScreenshotBtn:hover:not(:disabled),
+.overlayScreenshotBtn.active {
+  background: rgba(255, 77, 0, 0.12);
+  border-color: rgba(255, 77, 0, 0.4);
+}
+.overlayScreenshotBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.overlayPendingAttachment {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  padding: 7px;
+  border: 1px solid rgba(255, 77, 0, 0.25);
+  border-radius: 10px;
+  background: rgba(255, 77, 0, 0.06);
+}
+.overlayPendingAttachment img {
+  width: 74px;
+  height: 46px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.overlayPendingAttachmentInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  color: #c8c7c0;
+  font-size: 10px;
+}
+.overlayPendingAttachmentInfo button {
+  border: 0;
+  background: transparent;
+  color: #ff9a6f;
+  font: inherit;
+  cursor: pointer;
+}
+.overlayScreenshotError {
+  flex-shrink: 0;
+  color: #fca5a5;
+  font-size: 10px;
+}
+.overlaySourcePicker {
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(20, 20, 18, 0.92);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.overlaySourcePickerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: #c8c7c0;
+}
+.overlaySourcePickerHint {
+  color: #8a897f;
+  font-size: 10px;
+}
+.overlaySourcePickerList {
+  max-height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.overlaySourceItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: #e8e7e0;
+  font-size: 11px;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+.overlaySourceItem:hover {
+  background: rgba(255, 107, 53, 0.08);
+  border-color: #ff6b35;
+}
+.overlaySourceKind {
+  opacity: 0.6;
+}
+.overlaySourceLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.overlaySourceEmpty {
+  color: #8a897f;
+  font-size: 11px;
+  padding: 6px;
+}
+.overlaySourceIcon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.overlaySourcePreview {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  object-fit: cover;
+  max-height: 160px;
+}
+
+/* History view — thin minimal like chat messages, no thick cards */
+.overlayHistoryView {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0;
+}
+.overlayHistoryTop {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 2px 6px;
+  border-bottom: 1px solid rgba(46,46,44,0.25);
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+.overlayHistoryTitle {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #83827a;
+  text-transform: uppercase;
+}
+.overlayHistoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 0;
+  padding-bottom: 10px;
+  overflow: visible;
+  flex: 0 0 auto;
+}
+.overlayHistoryEmpty {
+  color: #83827a;
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+  padding: 20px 10px;
+}
+.overlayHistoryItem {
+  appearance: none;
+  text-align: left;
+  border: 1px solid rgba(46,46,44,0.9);
+  background: rgba(38,38,36,0.45);
+  border-radius: 12px;
+  padding: 12px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: inherit;
+  color: #e9e8e4;
+}
+.overlayHistoryItem:hover {
+  border-color: rgba(255,77,0,0.25);
+  background: rgba(38,38,36,0.65);
+}
+.overlayHistoryItemMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.overlayHistoryItemTime {
+  font-size: 10px;
+  color: #83827a;
+}
+.overlayHistoryItemModel {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 9px;
+  color: #ff4d00;
+  background: rgba(255,77,0,0.12);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.overlayHistoryItemTurns {
+  font-size: 9px;
+  color: #83827a;
+  background: rgba(255,255,255,0.06);
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+.overlayHistoryItemTitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: #e9e8e4;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 2px;
+}
+.overlayHistoryItemPreview {
+  font-size: 11px;
+  color: #83827a;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+body.overlay-resizing,
+body.overlay-resizing * {
+  user-select: none !important;
+}
+
+body.overlay-resizing--both,
+body.overlay-resizing--both * {
+  cursor: nwse-resize !important;
+}
+
+body.overlay-resizing--horizontal,
+body.overlay-resizing--horizontal * {
+  cursor: ew-resize !important;
+}
+
+body.overlay-resizing--vertical,
+body.overlay-resizing--vertical * {
+  cursor: ns-resize !important;
+}
+
+.overlayResize {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.overlayResizeEdge,
+.overlayResizeHandle {
+  position: absolute;
+  pointer-events: auto;
+  touch-action: none;
+  z-index: 5;
+}
+
+.overlayResizeEdge--east {
+  top: 12px;
+  right: 0;
+  bottom: 12px;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.overlayResizeEdge--south {
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.overlayResizeHandle {
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  cursor: nwse-resize;
+  background: transparent;
+}
+
+.overlayResizeHandle:hover,
+.overlayResizeEdge:hover {
+  background-color: rgba(131, 130, 122, 0.12);
+}
+
+.overlayCopiedToast {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1e22;
+  color: #e9e8e4;
+  border: 1px solid rgba(255,255,255,0.14);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  pointer-events: none;
+  z-index: 5;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+
+.overlayHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.overlayModeBtn {
+  appearance: none;
+  border: 1px solid rgba(46, 46, 44, 0.9);
+  background: rgba(38, 38, 36, 0.7);
+  color: #83827a;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.overlayModeBtn.active {
+  color: #e9e8e4;
+  border-color: rgba(255, 77, 0, 0.45);
+  background: rgba(255, 77, 0, 0.12);
+}
+
+.overlayModeBtn:hover {
+  background: rgba(38, 38, 36, 0.95);
+}
+
+.overlayTitle {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #e9e8e4;
+  font-size: 14px;
+}
+
+.overlayClose {
+  appearance: none;
+  border: 1px solid rgba(46, 46, 44, 0.9);
+  background: rgba(38, 38, 36, 0.7);
+  color: #e9e8e4;
+  border-radius: 10px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.overlayClose:hover {
+  background: rgba(38, 38, 36, 0.95);
+}
+
+.overlayBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+.overlayEmpty {
+  color: #83827a;
+  font-size: 13px;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+.overlayMsg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.overlayMsgLabel {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #83827a;
+}
+
+.overlayMsg--user .overlayMsgLabel {
+  color: #a8a7a0;
+}
+
+.overlayMsgText {
+  color: #e9e8e4;
+  line-height: 1.5;
+  font-size: 13px;
+  word-break: break-word;
+  /* pre-wrap moved to inner plain spans — rich blocks handle their own spacing */
+  user-select: text;
+  -webkit-user-select: text;
+}
+.overlayBody,
+.overlayRichContent,
+.overlayTextBlock,
+.overlayPara,
+.overlayH3, .overlayH4, .overlayH5,
+.overlayList, .overlayOrderedList,
+.overlayQuote,
+.overlayCodeBlock, .overlayCodeBlock code,
+.overlayTableWrap, .overlayDataTable {
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+}
+
+/* Rich mixed content — text + tables + code without replacement flicker */
+.overlayRichContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.overlayTextBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.overlayPara {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.overlayH3, .overlayH4, .overlayH5 {
+  margin: 0;
+  color: #f3f2ef;
+  line-height: 1.35;
+  font-weight: 700;
+}
+.overlayH3 { font-size: 14px; }
+.overlayH4 { font-size: 13px; color: #e9e8e4; }
+.overlayH5 { font-size: 12.5px; color: #d9d7d1; }
+
+.overlayList, .overlayOrderedList {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.overlayListItem {
+  line-height: 1.45;
+}
+.overlayQuote {
+  margin: 0;
+  padding: 6px 10px;
+  border-left: 2px solid rgba(255,77,0,0.5);
+  background: rgba(38,38,36,0.35);
+  border-radius: 6px;
+  color: #d9d7d1;
+  font-style: italic;
+}
+.overlayInlineCode {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11.5px;
+  background: rgba(38,38,36,0.85);
+  border: 1px solid rgba(46,46,44,0.9);
+  padding: 1px 5px;
+  border-radius: 6px;
+  color: #ff8a5c;
+  word-break: break-all;
+}
+.overlayBold { font-weight: 700; color: #f3f2ef; }
+.overlayItalic { font-style: italic; color: #d9d7d1; }
+
+/* KaTeX math */
+.math-inline {
+  display: inline-block;
+  vertical-align: baseline;
+  padding: 0 1px;
+}
+.math-inline .katex { font-size: 1.05em; }
+.math-display {
+  margin: 10px 0;
+  padding: 10px 12px;
+  background: rgba(38,38,36,0.45);
+  border: 1px solid rgba(46,46,44,0.9);
+  border-radius: 10px;
+  overflow-x: auto;
+  text-align: center;
+}
+.math-display .katex-display {
+  margin: 0;
+}
+.math-display .katex { font-size: 1.08em; }
+
+.overlayCodeWrap {
+  position: relative;
+  border: 1px solid rgba(46,46,44,0.9);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0f0f0f;
+  display: flex;
+  flex-direction: column;
+}
+.overlayCodeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: rgba(28,28,26,0.95);
+  border-bottom: 1px solid rgba(46,46,44,0.9);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+.overlayCodeLang {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #83827a;
+}
+.overlayCodeCopy {
+  appearance: none;
+  border: 1px solid rgba(46,46,44,0.9);
+  background: rgba(38,38,36,0.85);
+  color: #e9e8e4;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.overlayCodeCopy:hover {
+  background: rgba(38,38,36,0.95);
+  border-color: rgba(255,77,0,0.35);
+}
+.overlayCodeCopy.copied {
+  color: #4ade80;
+  border-color: rgba(74,222,128,0.35);
+  background: rgba(74,222,128,0.12);
+}
+.overlayCodeBlock {
+  margin: 0;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow-x: auto;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #e9e8e4;
+  white-space: pre;
+  user-select: text;
+  -webkit-user-select: text;
+}
+.overlayCodeBlock code { white-space: pre; user-select: text; -webkit-user-select: text; }
+
+.overlayTableWrap {
+  overflow-x: auto;
+  border: 1px solid rgba(46, 46, 44, 0.9);
+  border-radius: 12px;
+  background: rgba(20, 20, 19, 0.55);
+}
+
+.overlayDataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+}
+
+.overlayDataTable th,
+.overlayDataTable td {
+  padding: 8px 10px;
+  border: 1px solid rgba(131, 130, 122, 0.28);
+  text-align: left;
+  vertical-align: top;
+}
+
+.overlayDataTable thead th {
+  background: rgba(255, 77, 0, 0.08);
+  color: #f3f2ef;
+  font-weight: 700;
+}
+
+.overlayDataTable tbody td {
+  color: #d9d7d1;
+  background: rgba(38, 38, 36, 0.35);
+}
+
+.overlayMsg--user .overlayMsgText {
+  color: #c8c7c0;
+  font-size: 13px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(46, 46, 44, 0.35);
+}
+.overlayMessageImage {
+  display: block;
+  max-width: min(100%, 360px);
+  max-height: 240px;
+  margin-top: 7px;
+  border: 1px solid rgba(46, 46, 44, 0.9);
+  border-radius: 9px;
+  object-fit: contain;
+}
+
+.overlayPlaceholder {
+  color: #83827a;
+  font-style: italic;
+}
+
+.overlayFooter {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(46, 46, 44, 0.5);
+}
+
+.overlayBtn {
+  appearance: none;
+  flex: 1;
+  border: 1px solid rgba(46, 46, 44, 0.9);
+  background: rgba(38, 38, 36, 0.7);
+  color: #e9e8e4;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.overlayBtn:hover:not(:disabled) {
+  background: rgba(38, 38, 36, 0.95);
+  border-color: rgba(255, 77, 0, 0.4);
+}
+
+.overlayBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.overlayBtnClose:hover:not(:disabled) {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.overlayBtnSecondary {
+  flex: 0 1 auto;
+  min-width: 72px;
+}
+
+.overlayModelPicker {
+  flex: 1 1 120px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.overlayModelPickerLabel {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.35px;
+  color: #83827a;
+}
+
+.overlayModelSelect {
+  width: 100%;
+  appearance: none;
+  border: 1px solid rgba(46, 46, 44, 0.95);
+  background: linear-gradient(180deg, rgba(38,38,36,0.96), rgba(26,26,24,0.96));
+  background-image: linear-gradient(180deg, rgba(38,38,36,0.96), rgba(26,26,24,0.96)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e9e8e4' d='M3 4.5 6 7.5 9 4.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat;
+  background-position: center, right 10px center;
+  color: #e9e8e4;
+  border-radius: 12px;
+  padding: 8px 28px 8px 10px;
+  font-size: 12px;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 0 0 1px rgba(255,255,255,0.02);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.overlayModelSelect:hover {
+  border-color: rgba(255, 77, 0, 0.45);
+  box-shadow: 0 0 0 1px rgba(255, 77, 0, 0.08);
+}
+
+.overlayModelSelect:focus {
+  outline: none;
+  border-color: rgba(255, 77, 0, 0.65);
+  box-shadow: 0 0 0 2px rgba(255, 77, 0, 0.12);
+}
+
+/* Scrollbar */
+.overlayBody::-webkit-scrollbar {
+  width: 4px;
+}
+.overlayBody::-webkit-scrollbar-track {
+  background: transparent;
+}
+.overlayBody::-webkit-scrollbar-thumb {
+  background: rgba(131, 130, 122, 0.25);
+  border-radius: 999px;
+}

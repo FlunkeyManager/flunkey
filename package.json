@@ -1,0 +1,43 @@
+{
+  "name": "flunkey",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Flunkey — voice-activated AI assistant for Windows (F8 dictation, F9 chat, F10 transform)",
+  "author": "Flunkey <flunkeymanager@gmail.com>",
+  "homepage": "https://www.flunkey.space",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "build:msix": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/build-msix.ps1",
+    "build:msix:test": "npm run build:msix && powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/sign-msix-local.ps1",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-autostart": "^2.5.1",
+    "@tauri-apps/plugin-clipboard-manager": "^2.3.2",
+    "@tauri-apps/plugin-opener": "^2",
+    "@tauri-apps/plugin-store": "^2.4.2",
+    "katex": "^0.18.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4",
+    "vitest": "^2.1.9"
+  }
+}

@@ -1,0 +1,63 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Secrets — never commit keys, certs, or updater signatures
+# FLUNKEY_MSIX_* identity values stay in env vars, never in files.
+.env
+.env.*
+*.pem
+*.key
+*.sig
+*.pub
+.tauri-updater.json
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Rust / Tauri build outputs (src-tauri/.gitignore covers src-tauri/target/,
+# this covers any other target/ plus bundles if output paths change)
+target/
+*.rs.bk
+*.pdb
+
+# Windows installer / Store packages + local test signing artifacts
+*.msix
+*.msixupload
+*.appx
+*.appxbundle
+*.msi
+*-local-test.msix
+*.cer
+*.pfx
+*.p12
+*.pvk
+
+# Node / build caches and test output
+.npm/
+.yarn/*
+.pnp.*
+coverage/
+*.tsbuildinfo
+.vite/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

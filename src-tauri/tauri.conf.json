@@ -1,0 +1,88 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Flunkey",
+  "version": "1.0.0",
+  "identifier": "com.flunkey.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Flunkey",
+        "width": 860,
+        "height": 620,
+        "minWidth": 860,
+        "minHeight": 620,
+        "decorations": false,
+        "center": true
+      },
+      {
+        "label": "overlay",
+        "title": "Flunkey Overlay",
+        "url": "overlay.html",
+        "width": 420,
+        "height": 720,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "resizable": false,
+        "shadow": false,
+        "focusable": true,
+        "visible": false
+      },
+      {
+        "label": "pill",
+        "title": "Flunkey Recording",
+        "url": "pill.html",
+        "width": 180,
+        "height": 112,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "resizable": false,
+        "shadow": false,
+        "focusable": false,
+        "visible": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' ws://localhost:* http://localhost:* http://127.0.0.1:* https://api.groq.com https://api.openai.com https://generativelanguage.googleapis.com https://openrouter.ai"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "publisher": "Rohan Sharvesh",
+    "copyright": "Copyright © 2026 Flunkey. All rights reserved.",
+    "category": "Productivity",
+    "shortDescription": "Voice-activated AI assistant for Windows",
+    "longDescription": "Flunkey lets you dictate anywhere with F8, ask AI with F9, and transform selected text with F10 — using your own API keys or fully on-device.",
+    "homepage": "https://www.flunkey.space",
+    "licenseFile": "../LICENSE",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/taskbar.ico",
+        "icons/icon.png"
+      ],
+    "resources": {
+      "whisper-bin/*": "whisper/"
+    },
+    "windows": {
+      "nsis": {
+        "displayLanguageSelector": false,
+        "installerIcon": "icons/icon.ico",
+        "sidebarImage": "icons/installer-sidebar.bmp",
+        "headerImage": "icons/installer-header.bmp"
+      }
+    }
+  }
+}
